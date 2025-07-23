@@ -46,7 +46,7 @@ public class DebugRunner {
         // Parallel execution (equivalent to PARALLEL_EXECUTION_ENABLED_PROPERTY_NAME etc.)
         // Note: For Main.run, --threads refers to parallel scenario execution
         cucumberArgs.add("--threads");
-        cucumberArgs.add("1"); // Set to 4 threads as per your JUnit Platform runner
+        cucumberArgs.add("10"); // Set to 4 threads as per your JUnit Platform runner
 
 
         // Tags (equivalent to FILTER_TAGS_PROPERTY_NAME)
