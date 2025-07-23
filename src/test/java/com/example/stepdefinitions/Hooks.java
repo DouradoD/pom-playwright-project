@@ -2,27 +2,24 @@ package com.example.stepdefinitions;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.After;
-import io.cucumber.java.AfterAll;
 
-import com.example.setup.DriverManager;
+import com.example.setup.BrowserManager;
+
+import io.cucumber.java.*;
 
 public class Hooks {
-
     @Before
-    public void setup() {
-        System.out.println("Setting up the browser");
-        DriverManager.initializeBrowser();
-    }
-    
-    @After
-    public void closeBrowser() {
-        DriverManager.closeBrowser();
-        System.out.println("Browser closed");
+    public void beforeScenario() {
+        BrowserManager.initialize();
     }
 
-    @AfterAll
-    public static void tearDown() {
-        System.out.println("All tests completed");
-        DriverManager.closePlaywright();
+    @AfterStep
+    public void afterStep() {
+        // Add any step-level logic if needed
+    }
+
+    @After
+    public void tearDown() {
+        BrowserManager.close();
     }
 }

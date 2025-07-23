@@ -1,33 +1,29 @@
 package com.example.pages;
 
-import com.example.mappings.HomeMapping;
+import com.example.LocatorLoader;
+import com.example.base.BasePage;
+import com.example.locators.HomeLocators;
 import com.microsoft.playwright.Page;
-import com.example.base.BasePage; // Import the BasePage class
+
 
 public class HomePage extends BasePage {
-    // Define the WebDriver instance
-    private HomeMapping mapping;
-    private Page page;
-
-
-    
-    // Constructor to initialize the WebDriver
-    public HomePage(Page page) {
+    private HomeLocators locator;
+    public HomePage(Page page, String projectName) {
         super(page);
-        // Initialize the WebDriver instance
-        // and other necessary components
-        this.mapping = new HomeMapping();
-        this.page = page;
-
+        this.locator = LocatorLoader.getLocators(HomeLocators.class, projectName);
     }
-
-    public HomeMapping getMapping() {
-        return mapping;
+    
+    public void navigateToGoogle() {
+        page.navigate("https://www.google.com");
     }
-
-    // Abstract method to be implemented by subclasses
-    public Boolean IsHomeScreenVisible(){
-        return isElementVisible(mapping.LOGO);
+    
+    public void searchFor(String term) {
+        System.out.println("[SuperClass] HomePage Class: Searching for: " + term);
+        page.fill(locator.SEARCH_FIELD_INPUT, term);
     }
-
+    
+    public String getSearchFieldValue() {
+        System.out.println(locator.getClass().getSimpleName() + " - SEARCH_FIELD_INPUT: " + locator.SEARCH_FIELD_INPUT);
+        return page.inputValue(locator.SEARCH_FIELD_INPUT);
+    }
 }

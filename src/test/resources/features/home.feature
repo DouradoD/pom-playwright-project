@@ -1,17 +1,5 @@
-Feature: Access the Selenium initial Screen
-
-    @smoke
-    Scenario: Access the Selenium initial Screen - Smoke
-        When he accesses the URL "https://www.selenium.dev/"
-        Then he should see the title "SeleniumHQ Browser Automation"
-    
-    
-    @regression
-    Scenario: Access the Selenium initial Screen - Regression
-        When he accesses the URL "https://www.selenium.dev/"
-        Then he should see the title "SeleniumHQ Browser Automation"
-
-    @test
-    Scenario: Access the Selenium initial Screen - Tets
-        When he accesses the URL "https://www.selenium.dev/"
-        Then he should see the title "SeleniumHQ Browser Automation"
+Feature: Google Search
+  Scenario: Search for a term on Google
+    Given the user opens the Google URL
+    When he inputs a "Playwright" value
+    Then the "Playwright" value input should be inside the field

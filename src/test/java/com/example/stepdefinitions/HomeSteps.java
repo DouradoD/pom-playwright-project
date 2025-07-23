@@ -1,32 +1,33 @@
 package com.example.stepdefinitions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.example.setup.TestContext;
+import com.example.pages.HomePage;
+import com.example.setup.BrowserManager;
 
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class HomeSteps {
     
-    TestContext context;
-
-    // World is injected automatically by Picocontainer
-    public HomeSteps(TestContext context) {
-        this.context = context;
+    @Given("the user opens the Google URL")
+    public void openGoogle() {
+        BrowserManager.getTestContext().getPages().getPage(HomePage.class).navigateToGoogle();
     }
     
-
-    @When("he accesses the URL {string}")
-    public void he_accesses_the_url(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        //throw new io.cucumber.java.PendingException();
-        context.page.navigate(string);
+    @When("he inputs a {string} value")
+    public void inputValue(String value) {
+        BrowserManager.getTestContext().getPages().getPage(HomePage.class).searchFor(value);
     }
-    @Then("he should see the title {string}")
-    public void he_should_see_the_title(String string) {
-        assertEquals(true , context.getPages().getHome().IsHomeScreenVisible());
+    
+    @Then("the {string} value input should be inside the field")
+    public void verifyInputValue(String expectedValue) {
+        String actualValue = BrowserManager.getTestContext()
+            .getPages()
+            .getPage(HomePage.class)
+            .getSearchFieldValue();
         
+        assert actualValue.equals(expectedValue) : 
+            "Expected input value '" + expectedValue + "' but found '" + actualValue + "'";
     }
-
 }

@@ -1,32 +1,47 @@
 package com.example.setup;
 
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.Page;
+import com.example.PageFactory;
+import com.microsoft.playwright.*;
 
 public class TestContext {
-        private PageManager pages;
-        private BrowserContext context;
-        public  Page page;
-        private Browser browser;
+    private static final ThreadLocal<Playwright> playwright = new ThreadLocal<>();
+    private static final ThreadLocal<Browser> browser = new ThreadLocal<>();
+    private static final ThreadLocal<BrowserContext> browserContext = new ThreadLocal<>();
+    private static final ThreadLocal<Page> playwrightPage = new ThreadLocal<>();
+    private final PageFactory pageFactory;
 
-    
     public TestContext() {
-        browser = DriverManager.getBrowser();
-        context = browser.newContext();
-        page = context.newPage();
-        // Initialize the PageManager with the WebDriver instance
-    
-        initializePages(page);
+        initializePlaywrightResources();
+        this.pageFactory = new PageFactory(playwrightPage.get());
     }
-    
-    private void initializePages(Page page) {
-        System.out.println("Initializing pages");
-        pages = new PageManager(page);
 
+    private void initializePlaywrightResources() {
+        playwright.set(Playwright.create());
+        browser.set(playwright.get().chromium().launch(new BrowserType.LaunchOptions().setHeadless(false)));
+        browserContext.set(browser.get().newContext());
+        playwrightPage.set(browserContext.get().newPage());
     }
-    
-    // Getters for pages
-    public PageManager getPages() { return pages; }
-    public Browser getBrowser() { return browser; }
+
+    public PageFactory getPages() {
+        return pageFactory;
+    }
+
+    public void closeAndCleanUpLocalThreads() {
+        if (playwrightPage.get() != null) {
+            playwrightPage.get().close();
+            playwrightPage.remove();
+        }
+        if (browserContext.get() != null) {
+            browserContext.get().close();
+            browserContext.remove();
+        }
+        if (browser.get() != null) {
+            browser.get().close();
+            browser.remove();
+        }
+        if (playwright.get() != null) {
+            playwright.get().close();
+            playwright.remove();
+        }
+    }
 }
