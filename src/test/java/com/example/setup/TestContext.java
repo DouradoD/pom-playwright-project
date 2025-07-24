@@ -17,7 +17,7 @@ public class TestContext {
 
     private void initializePlaywrightResources() {
         playwright.set(Playwright.create());
-        browser.set(playwright.get().chromium().launch(new BrowserType.LaunchOptions().setHeadless(false)));
+        browser.set(playwright.get().chromium().launch(new BrowserType.LaunchOptions().setHeadless(true)));
         browserContext.set(browser.get().newContext());
         playwrightPage.set(browserContext.get().newPage());
     }
